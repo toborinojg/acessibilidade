@@ -1,0 +1,1737 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elementos HTML 5.0</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #bbddff;
+      --bg-sidebar: #f4f4f4;
+      --bg-content: #d6ecff;
+      --bg-detail: #ffffff88;
+      --bg-detail-open: #ffffffcc;
+      --bg-code: #1a2a3a;
+      --color-text: #111111;
+      --color-heading: #003366;
+      --color-accent: #0055aa;
+      --color-accent2: #0077cc;
+      --color-link: #0055aa;
+      --color-link-active: #003380;
+      --color-tag: #005599;
+      --color-border: #88bbee;
+      --color-summary-hover: #cce8ff;
+      --font-body: 'Roboto', sans-serif;
+      --font-code: 'Roboto Mono', monospace;
+      --sidebar-w: 260px;
+      --header-h: 116px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--color-text);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: var(--color-heading);
+      display: flex; padding: 8px 28px 0px;
+	  align-items: center;
+      /*box-shadow: 0 2px 8px #0003;*/
+    }
+    header h1 {
+      font-family: var(--font-body);
+      font-size: 2.25rem; font-weight: 700;
+      color: #fff; letter-spacing: 0.5px;
+    }
+    header span {
+      margin-left: 0px; font-size: 0.8rem; font-weight: 300;
+      color: #fff; letter-spacing: 1px; text-transform: uppercase;
+    }
+
+    /* ── LAYOUT ── */
+    .layout {
+      display: flex;
+      margin-top: var(--header-h);
+      min-height: calc(100vh - var(--header-h));
+    }
+
+    /* ── SIDEBAR ── */
+    nav.sidebar {
+      width: var(--sidebar-w);
+      min-width: var(--sidebar-w);
+      background: var(--bg-sidebar);
+      border-right: 1.5px solid var(--color-border);
+      position: sticky; top: var(--header-h);
+      height: calc(100vh - var(--header-h));
+      overflow-y: auto;
+      padding: 20px 0 40px;
+    }
+    nav.sidebar::-webkit-scrollbar { width: 5px; }
+    nav.sidebar::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 3px; }
+
+    .sidebar-group { margin-bottom: 4px; }
+    .sidebar-group-title {
+      font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1.2px; color: var(--color-heading);
+      padding: 12px 18px 4px;
+    }
+    .sidebar-group a {
+      display: block; padding: 5px 18px 5px 26px;
+      color: var(--color-link); text-decoration: none;
+      font-size: 0.85rem; font-family: var(--font-code);
+      border-left: 3px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .sidebar-group a:hover {
+      background: var(--color-summary-hover);
+      border-left-color: var(--color-accent2);
+      color: var(--color-link-active);
+    }
+
+    /* ── MAIN CONTENT ── */
+    main {
+      flex: 1;
+      padding: 36px 40px 60px;
+      max-width: 960px;
+    }
+
+    .section-title {
+      font-size: 1.35rem; font-weight: 700;
+      color: var(--color-heading);
+      margin: 40px 0 6px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid var(--color-accent);
+      scroll-margin-top: calc(var(--header-h) + 16px);
+    }
+    .section-title:first-child { margin-top: 0; }
+    .section-desc {
+      font-size: 0.9rem; color: #336; margin-bottom: 14px; font-weight: 300;
+    }
+
+    /* ── DETAILS / ACCORDION ── */
+    details {
+      background: var(--bg-detail);
+      border: 1px solid var(--color-border);
+      border-radius: 7px;
+      margin-bottom: 8px;
+      transition: background 0.2s;
+      overflow: hidden;
+    }
+    details[open] { background: var(--bg-detail-open); }
+
+    summary {
+      cursor: pointer;
+      padding: 11px 16px;
+      display: flex; align-items: center; gap: 10px;
+      font-weight: 500; font-size: 0.95rem;
+      color: var(--color-text);
+      list-style: none;
+      user-select: none;
+      transition: background 0.15s;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::before {
+      content: '▶';
+      font-size: 1.25rem; line-height: 0.5rem;
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+    details[open] > summary::before { transform: rotate(90deg); }
+    summary:hover { background: var(--color-summary-hover); }
+
+    .tag-badge {
+      font-family: var(--font-code);
+      font-size: 0.82rem; font-weight: 500;
+      background: var(--color-accent);
+      color: #fff;
+      border-radius: 4px;
+      padding: 1px 7px;
+      letter-spacing: 0.3px;
+    }
+
+    .detail-body {
+      padding: 16px 18px 16px 38px;
+    }
+    .detail-body p {
+      font-size: 0.9rem; margin-bottom: 10px; color: #1a2a3a;
+    }
+    .detail-body strong { color: var(--color-heading); }
+
+    /* ── CODE BLOCKS ── */
+    pre {
+      background: var(--bg-code);
+      color: #c8e6ff;
+      font-family: var(--font-code);
+      font-size: 0.82rem;
+      border-radius: 6px;
+      padding: 14px 16px;
+      overflow-x: auto;
+      margin: 10px 0 6px;
+      line-height: 1.55;
+      border: 1px solid #334;
+    }
+    code {
+      font-family: var(--font-code);
+      font-size: 0.85em;
+      background: #daeeff;
+      color: var(--color-tag);
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+    pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
+
+    .demo-block {
+      background: #fff9;
+      border: 1px dashed var(--color-border);
+      border-radius: 5px;
+      padding: 12px 14px;
+      margin-top: 6px;
+      font-size: 0.88rem;
+    }
+    .demo-label {
+      font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--color-accent2); margin-bottom: 6px;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav.sidebar { display: none; }
+      main { padding: 20px 16px 40px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+<a href="https://toborino.com" target="_blank"><img src="toborino_square_400_branco-OFICIAL.svg" height="100" alt="Toborino" style="transform: scaleX(-1);"></a>
+<div>
+  <h1>Elementos HTML 5.0</h1>
+  <span>Referência Completa</span>
+</div>
+</header>
+
+<div class="layout">
+
+<!-- ══════════════ SIDEBAR ══════════════ -->
+<nav class="sidebar">
+
+  <div class="sidebar-group">
+    <div class="sidebar-group-title">Documento raiz</div>
+    <a href="#raiz">&lt;html&gt;</a>
+  </div>
+
+  <div class="sidebar-group">
+    <div class="sidebar-group-title">Metadados do documento</div>
+    <a href="#meta">&lt;head&gt;</a>
+    <a href="#meta">&lt;title&gt;</a>
+    <a href="#meta">&lt;base&gt;</a>
+    <a href="#meta">&lt;link&gt;</a>
+    <a href="#meta">&lt;meta&gt;</a>
+    <a href="#meta">&lt;style&gt;</a>
+  </div>
+
+  <div class="sidebar-group">
+    <div class="sidebar-group-title">Separação de Conteúdo</div>
+    <a href="#sec">&lt;body&gt;</a>
+    <a href="#sec">&lt;article&gt;</a>
+    <a href="#sec">&lt;section&gt;</a>
+    <a href="#sec">&lt;nav&gt;</a>
+    <a href="#sec">&lt;aside&gt;</a>
+    <a href="#sec">&lt;h1&gt;–&lt;h6&gt;</a>
+    <a href="#sec">&lt;hgroup&gt;</a>
+    <a href="#sec">&lt;header&gt;</a>
+    <a href="#sec">&lt;footer&gt;</a>
+    <a href="#sec">&lt;address&gt;</a>
+    <a href="#sec">&lt;main&gt;</a>
+  </div>
+
+  <div class="sidebar-group">
+    <div class="sidebar-group-title">Conteúdo de bloco</div>
+    <a href="#bloco">&lt;p&gt;</a>
+    <a href="#bloco">&lt;hr&gt;</a>
+    <a href="#bloco">&lt;pre&gt;</a>
+    <a href="#bloco">&lt;blockquote&gt;</a>
+    <a href="#bloco">&lt;ol&gt; / &lt;ul&gt;</a>
+    <a href="#bloco">&lt;li&gt;</a>
+    <a href="#bloco">&lt;dl&gt; / &lt;dt&gt; / &lt;dd&gt;</a>
+    <a href="#bloco">&lt;figure&gt;</a>
+    <a href="#bloco">&lt;figcaption&gt;</a>
+    <a href="#bloco">&lt;div&gt;</a>
+  </div>
+
+  <div class="sidebar-group">
+    <div class="sidebar-group-title">Semântica inline</div>
+    <a href="#inline">&lt;a&gt;</a>
+    <a href="#inline">&lt;em&gt; / &lt;strong&gt;</a>
+    <a href="#inline">&lt;small&gt;</a>
+    <a href="#inline">&lt;s&gt; / &lt;u&gt;</a>
+    <a href="#inline">&lt;cite&gt;</a>
+    <a href="#inline">&lt;q&gt;</a>
+    <a href="#inline">&lt;dfn&gt;</a>
+    <a href="#inline">&lt;abbr&gt;</a>
+    <a href="#inline">&lt;ruby&gt;</a>
+    <a href="#inline">&lt;data&gt;</a>
+    <a href="#inline">&lt;time&gt;</a>
+    <a href="#inline">&lt;code&gt;</a>
+    <a href="#inline">&lt;var&gt;</a>
+    <a href="#inline">&lt;samp&gt;</a>
+    <a href="#inline">&lt;kbd&gt;</a>
+    <a href="#inline">&lt;sub&gt; / &lt;sup&gt;</a>
+    <a href="#inline">&lt;i&gt; / &lt;b&gt;</a>
+    <a href="#inline">&lt;mark&gt;</a>
+    <a href="#inline">&lt;bdi&gt; / &lt;bdo&gt;</a>
+    <a href="#inline">&lt;span&gt;</a>
+    <a href="#inline">&lt;br&gt; / &lt;wbr&gt;</a>
+  </div>
+
+  <div class="sidebar-group">
+    <div class="sidebar-group-title">Imagem e multimídia</div>
+    <a href="#media">&lt;img&gt;</a>
+    <a href="#media">&lt;audio&gt;</a>
+    <a href="#media">&lt;video&gt;</a>
+    <a href="#media">&lt;track&gt;</a>
+    <a href="#media">&lt;map&gt; / &lt;area&gt;</a>
+  </div>
+
+  <div class="sidebar-group">
+    <div class="sidebar-group-title">Conteúdo incorporado</div>
+    <a href="#embed">&lt;iframe&gt;</a>
+    <a href="#embed">&lt;embed&gt;</a>
+    <a href="#embed">&lt;object&gt;</a>
+    <a href="#embed">&lt;picture&gt;</a>
+    <a href="#embed">&lt;source&gt;</a>
+    <a href="#embed">&lt;portal&gt;</a>
+  </div>
+
+  <div class="sidebar-group">
+    <div class="sidebar-group-title">SVG e MathML</div>
+    <a href="#svg">&lt;svg&gt;</a>
+    <a href="#svg">&lt;math&gt;</a>
+  </div>
+
+  <div class="sidebar-group">
+    <div class="sidebar-group-title">Scripts</div>
+    <a href="#scripts">&lt;script&gt;</a>
+    <a href="#scripts">&lt;noscript&gt;</a>
+    <a href="#scripts">&lt;template&gt;</a>
+    <a href="#scripts">&lt;slot&gt;</a>
+    <a href="#scripts">&lt;canvas&gt;</a>
+  </div>
+
+  <div class="sidebar-group">
+    <div class="sidebar-group-title">Tabelas</div>
+    <a href="#tabelas">&lt;table&gt;</a>
+    <a href="#tabelas">&lt;caption&gt;</a>
+    <a href="#tabelas">&lt;colgroup&gt; / &lt;col&gt;</a>
+    <a href="#tabelas">&lt;thead&gt; / &lt;tbody&gt; / &lt;tfoot&gt;</a>
+    <a href="#tabelas">&lt;tr&gt;</a>
+    <a href="#tabelas">&lt;td&gt; / &lt;th&gt;</a>
+  </div>
+
+  <div class="sidebar-group">
+    <div class="sidebar-group-title">Formulários</div>
+    <a href="#forms">&lt;form&gt;</a>
+    <a href="#forms">&lt;label&gt;</a>
+    <a href="#forms">&lt;input&gt;</a>
+    <a href="#forms">&lt;button&gt;</a>
+    <a href="#forms">&lt;select&gt;</a>
+    <a href="#forms">&lt;datalist&gt;</a>
+    <a href="#forms">&lt;optgroup&gt; / &lt;option&gt;</a>
+    <a href="#forms">&lt;textarea&gt;</a>
+    <a href="#forms">&lt;output&gt;</a>
+    <a href="#forms">&lt;progress&gt;</a>
+    <a href="#forms">&lt;meter&gt;</a>
+    <a href="#forms">&lt;fieldset&gt;</a>
+    <a href="#forms">&lt;legend&gt;</a>
+  </div>
+
+  <div class="sidebar-group">
+    <div class="sidebar-group-title">Interativos</div>
+    <a href="#interativos">&lt;details&gt;</a>
+    <a href="#interativos">&lt;summary&gt;</a>
+    <a href="#interativos">&lt;dialog&gt;</a>
+  </div>
+
+  <div class="sidebar-group">
+    <div class="sidebar-group-title">Obsoletos</div>
+    <a href="#obsoletos">Elementos obsoletos</a>
+  </div>
+  <p style="padding: 30px 18px 0px;text-align:center">
+	<small>
+		<a href="https://www.w3.org/TR/2009/WD-html5-20090212/Overview.html" target="_blank"></a>Especificações baseadas nos documentos do <abbr title="World Wide Web Consortium">W3C</abbr></a>.
+	</small>
+</p>
+</nav>
+
+<!-- ══════════════ MAIN ══════════════ -->
+<main>
+
+<!-- ─── DOCUMENTO RAIZ ─── -->
+<h2 class="section-title" id="raiz">Documento raiz</h2>
+<p class="section-desc">O elemento raiz de todo documento HTML.</p>
+
+<details>
+  <summary><span class="tag-badge">&lt;html&gt;</span> Raiz do documento HTML</summary>
+  <div class="detail-body">
+    <p>O elemento <strong>&lt;html&gt;</strong> representa a raiz de um documento HTML. Todos os outros elementos devem ser descendentes deste elemento. O atributo <code>lang</code> define o idioma do documento.</p>
+    <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="pt-BR"&gt;
+  &lt;head&gt;...&lt;/head&gt;
+  &lt;body&gt;...&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+  </div>
+</details>
+
+<!-- ─── METADADOS ─── -->
+<h2 class="section-title" id="meta">Metadados do documento</h2>
+<p class="section-desc">Contêm informações sobre o documento: título, scripts, folhas de estilo e outros metadados.</p>
+
+<details>
+  <summary><span class="tag-badge">&lt;head&gt;</span> Contêiner de metadados</summary>
+  <div class="detail-body">
+    <p>O elemento <strong>&lt;head&gt;</strong> contém informações legíveis por máquina sobre o documento, como título, scripts e folhas de estilo. Não é renderizado visualmente.</p>
+    <pre><code>&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;Minha Página&lt;/title&gt;
+&lt;/head&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;title&gt;</span> Título do documento</summary>
+  <div class="detail-body">
+    <p>Define o título do documento, exibido na aba do navegador e nos resultados de busca. Deve ser único e descritivo.</p>
+    <pre><code>&lt;title&gt;Elementos HTML 5.0 — Referência Completa&lt;/title&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;base&gt;</span> URL base do documento</summary>
+  <div class="detail-body">
+    <p>Especifica a URL base para URLs relativas no documento e o contexto padrão de navegação para links. Deve ser único no <code>&lt;head&gt;</code>.</p>
+    <pre><code>&lt;base href="https://exemplo.com/" target="_blank"&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;link&gt;</span> Recurso externo</summary>
+  <div class="detail-body">
+    <p>Especifica relações entre o documento e recursos externos. Mais usado para vincular folhas de estilo CSS, ícones e fontes.</p>
+    <pre><code>&lt;link rel="stylesheet" href="estilos.css"&gt;
+&lt;link rel="icon" href="favicon.ico" type="image/x-icon"&gt;
+&lt;link rel="preconnect" href="https://fonts.googleapis.com"&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;meta&gt;</span> Metadados</summary>
+  <div class="detail-body">
+    <p>Representa metadados que não podem ser representados por outros elementos HTML relacionados a metadados. Usado para charset, viewport, descrição, Open Graph etc.</p>
+    <pre><code>&lt;meta charset="UTF-8"&gt;
+&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+&lt;meta name="description" content="Referência de elementos HTML 5.0"&gt;
+&lt;meta property="og:title" content="Elementos HTML 5.0"&gt;
+&lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;style&gt;</span> Estilos CSS inline</summary>
+  <div class="detail-body">
+    <p>Contém informações de estilo CSS aplicadas ao documento. Pode ser colocado no <code>&lt;head&gt;</code> ou no corpo do documento.</p>
+    <pre><code>&lt;style&gt;
+  body {
+    font-family: 'Roboto', sans-serif;
+    background: #bbddff;
+  }
+  h1 { color: #003366; }
+&lt;/style&gt;</code></pre>
+  </div>
+</details>
+
+<!-- ─── SEPARAÇÃO ─── -->
+<h2 class="section-title" id="sec">Separação de conteúdo</h2>
+<p class="section-desc">Organizam o conteúdo do documento em seções lógicas, permitindo criar um esquema de estrutura para o conteúdo.</p>
+
+<details>
+  <summary><span class="tag-badge">&lt;body&gt;</span> Corpo do documento</summary>
+  <div class="detail-body">
+    <p>Representa o conteúdo principal de um documento HTML. Só pode haver um elemento <strong>&lt;body&gt;</strong> por documento.</p>
+    <pre><code>&lt;body onload="iniciar()"&gt;
+  &lt;h1&gt;Bem-vindo&lt;/h1&gt;
+  &lt;p&gt;Conteúdo principal aqui.&lt;/p&gt;
+&lt;/body&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;article&gt;</span> Conteúdo independente</summary>
+  <div class="detail-body">
+    <p>Representa uma composição autossuficiente, que poderia ser distribuída e reutilizada de forma independente, como um post de blog, artigo de revista ou comentário.</p>
+    <pre><code>&lt;article&gt;
+  &lt;h2&gt;Título do Artigo&lt;/h2&gt;
+  &lt;p&gt;Publicado em &lt;time datetime="2025-04-20"&gt;20 de abril de 2025&lt;/time&gt;&lt;/p&gt;
+  &lt;p&gt;Conteúdo do artigo...&lt;/p&gt;
+&lt;/article&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;section&gt;</span> Seção genérica</summary>
+  <div class="detail-body">
+    <p>Representa uma seção genérica de um documento. Use quando não houver elemento semântico mais específico. Geralmente inclui um cabeçalho.</p>
+    <pre><code>&lt;section&gt;
+  &lt;h2&gt;Introdução&lt;/h2&gt;
+  &lt;p&gt;Esta seção apresenta o tema...&lt;/p&gt;
+&lt;/section&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;nav&gt;</span> Navegação</summary>
+  <div class="detail-body">
+    <p>Representa uma seção com links de navegação — menu principal, índice, breadcrumb etc.</p>
+    <pre><code>&lt;nav aria-label="Menu principal"&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;a href="/"&gt;Início&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="/sobre"&gt;Sobre&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="/contato"&gt;Contato&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;aside&gt;</span> Conteúdo tangencial</summary>
+  <div class="detail-body">
+    <p>Representa conteúdo indiretamente relacionado ao conteúdo principal: barras laterais, callouts, publicidade ou grupos de elementos de navegação.</p>
+    <pre><code>&lt;aside&gt;
+  &lt;h3&gt;Leia também&lt;/h3&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;a href="/css"&gt;Referência CSS&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/aside&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;h1&gt; – &lt;h6&gt;</span> Cabeçalhos</summary>
+  <div class="detail-body">
+    <p>Seis níveis de cabeçalhos de seção. <strong>&lt;h1&gt;</strong> é o mais importante e <strong>&lt;h6&gt;</strong> é o menos importante. Use em ordem hierárquica.</p>
+    <pre><code>&lt;h1&gt;Título principal&lt;/h1&gt;
+&lt;h2&gt;Subtítulo&lt;/h2&gt;
+&lt;h3&gt;Seção de nível 3&lt;/h3&gt;
+&lt;h4&gt;Seção de nível 4&lt;/h4&gt;
+&lt;h5&gt;Seção de nível 5&lt;/h5&gt;
+&lt;h6&gt;Seção de nível 6&lt;/h6&gt;</code></pre>
+    <div class="demo-block">
+      <div class="demo-label">Renderização</div>
+      <h1 style="font-size:1.5rem;margin:2px 0">Título principal (h1)</h1>
+      <h2 style="font-size:1.25rem;margin:2px 0">Subtítulo (h2)</h2>
+      <h3 style="font-size:1.1rem;margin:2px 0">Nível 3 (h3)</h3>
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;hgroup&gt;</span> Grupo de cabeçalhos</summary>
+  <div class="detail-body">
+    <p>Agrupa um título e subtítulos relacionados como uma única unidade semântica. Útil quando um cabeçalho possui um subtítulo ou slogan.</p>
+    <pre><code>&lt;hgroup&gt;
+  &lt;h1&gt;Elementos HTML 5.0&lt;/h1&gt;
+  &lt;p&gt;Guia de referência completo&lt;/p&gt;
+&lt;/hgroup&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;header&gt;</span> Cabeçalho da seção</summary>
+  <div class="detail-body">
+    <p>Representa conteúdo introdutório ou de navegação para sua seção pai. Pode conter um grupo de navegação, logotipo, formulário de busca etc.</p>
+    <pre><code>&lt;header&gt;
+  &lt;img src="logo.svg" alt="Logotipo"&gt;
+  &lt;nav&gt;...&lt;/nav&gt;
+&lt;/header&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;footer&gt;</span> Rodapé da seção</summary>
+  <div class="detail-body">
+    <p>Representa o rodapé do conteúdo de seção mais próximo. Normalmente contém informações sobre o autor, direitos autorais ou links relacionados.</p>
+    <pre><code>&lt;footer&gt;
+  &lt;p&gt;&amp;copy; 2025 Minha Empresa. Todos os direitos reservados.&lt;/p&gt;
+  &lt;address&gt;contato@empresa.com&lt;/address&gt;
+&lt;/footer&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;address&gt;</span> Informações de contato</summary>
+  <div class="detail-body">
+    <p>Indica que o conteúdo fornece informações de contato da pessoa ou organização mais próxima — não necessariamente um endereço postal.</p>
+    <pre><code>&lt;address&gt;
+  &lt;a href="mailto:contato@exemplo.com"&gt;contato@exemplo.com&lt;/a&gt;&lt;br&gt;
+  &lt;a href="tel:+5519999999999"&gt;(19) 99999-9999&lt;/a&gt;
+&lt;/address&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;main&gt;</span> Conteúdo principal</summary>
+  <div class="detail-body">
+    <p>Representa o conteúdo dominante do <code>&lt;body&gt;</code>. Deve ser único por documento e não deve ser incluído dentro de <code>&lt;article&gt;</code>, <code>&lt;aside&gt;</code>, <code>&lt;footer&gt;</code>, <code>&lt;header&gt;</code> ou <code>&lt;nav&gt;</code>.</p>
+    <pre><code>&lt;body&gt;
+  &lt;header&gt;...&lt;/header&gt;
+  &lt;main&gt;
+    &lt;h1&gt;Conteúdo principal&lt;/h1&gt;
+    &lt;p&gt;...&lt;/p&gt;
+  &lt;/main&gt;
+  &lt;footer&gt;...&lt;/footer&gt;
+&lt;/body&gt;</code></pre>
+  </div>
+</details>
+
+<!-- ─── BLOCO ─── -->
+<h2 class="section-title" id="bloco">Conteúdo de bloco (fluxo de texto)</h2>
+<p class="section-desc">Elementos que organizam blocos de conteúdo: parágrafos, listas, citações e divisões.</p>
+
+<details>
+  <summary><span class="tag-badge">&lt;p&gt;</span> Parágrafo</summary>
+  <div class="detail-body">
+    <p>Representa um parágrafo de texto. Navegadores adicionam espaçamento vertical automaticamente.</p>
+    <pre><code>&lt;p&gt;Este é um parágrafo de exemplo com texto simples.&lt;/p&gt;
+&lt;p&gt;Este é outro parágrafo separado do anterior.&lt;/p&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;hr&gt;</span> Separador temático</summary>
+  <div class="detail-body">
+    <p>Representa uma quebra temática entre parágrafos — transição de cena, mudança de tema. Renderizado como linha horizontal.</p>
+    <pre><code>&lt;p&gt;Fim de uma seção temática.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;Início de nova seção temática.&lt;/p&gt;</code></pre>
+    <div class="demo-block"><div class="demo-label">Renderização</div><hr></div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;pre&gt;</span> Texto pré-formatado</summary>
+  <div class="detail-body">
+    <p>Representa texto pré-formatado. O texto é exibido com fonte monoespaçada e preserva espaços em branco e quebras de linha.</p>
+    <pre><code>&lt;pre&gt;
+  function ola() {
+    console.log("Olá, mundo!");
+  }
+&lt;/pre&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;blockquote&gt;</span> Citação em bloco</summary>
+  <div class="detail-body">
+    <p>Indica que o texto incluso é uma citação estendida de outra fonte. O atributo <code>cite</code> pode indicar a URL da fonte.</p>
+    <pre><code>&lt;blockquote cite="https://www.w3.org/"&gt;
+  &lt;p&gt;A Web deve funcionar para todos.&lt;/p&gt;
+  &lt;footer&gt;— &lt;cite&gt;Tim Berners-Lee&lt;/cite&gt;&lt;/footer&gt;
+&lt;/blockquote&gt;</code></pre>
+    <div class="demo-block">
+      <div class="demo-label">Renderização</div>
+      <blockquote style="border-left:4px solid #0077cc;padding-left:14px;font-style:italic">A Web deve funcionar para todos.</blockquote>
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;ol&gt; / &lt;ul&gt;</span> Listas ordenada e não-ordenada</summary>
+  <div class="detail-body">
+    <p><strong>&lt;ol&gt;</strong> representa uma lista ordenada (numerada); <strong>&lt;ul&gt;</strong> representa uma lista não-ordenada (com marcadores). Ambas contêm elementos <code>&lt;li&gt;</code>.</p>
+    <pre><code>&lt;!-- Lista ordenada --&gt;
+&lt;ol type="1" start="1"&gt;
+  &lt;li&gt;Primeiro item&lt;/li&gt;
+  &lt;li&gt;Segundo item&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;!-- Lista não-ordenada --&gt;
+&lt;ul&gt;
+  &lt;li&gt;Item A&lt;/li&gt;
+  &lt;li&gt;Item B&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;li&gt;</span> Item de lista</summary>
+  <div class="detail-body">
+    <p>Representa um item em uma lista. Deve ser filho de <code>&lt;ol&gt;</code>, <code>&lt;ul&gt;</code> ou <code>&lt;menu&gt;</code>. O atributo <code>value</code> define o ordinal em listas <code>&lt;ol&gt;</code>.</p>
+    <pre><code>&lt;ol&gt;
+  &lt;li value="5"&gt;Quinto item (mesmo que seja o primeiro no HTML)&lt;/li&gt;
+  &lt;li&gt;Sexto item&lt;/li&gt;
+&lt;/ol&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;dl&gt; / &lt;dt&gt; / &lt;dd&gt;</span> Lista de descrição</summary>
+  <div class="detail-body">
+    <p><strong>&lt;dl&gt;</strong> é a lista de descrição. <strong>&lt;dt&gt;</strong> é o termo e <strong>&lt;dd&gt;</strong> é a descrição/definição.</p>
+    <pre><code>&lt;dl&gt;
+  &lt;dt&gt;HTML&lt;/dt&gt;
+  &lt;dd&gt;HyperText Markup Language — linguagem de marcação padrão para a Web.&lt;/dd&gt;
+
+  &lt;dt&gt;CSS&lt;/dt&gt;
+  &lt;dd&gt;Cascading Style Sheets — folhas de estilo em cascata.&lt;/dd&gt;
+&lt;/dl&gt;</code></pre>
+    <div class="demo-block">
+      <div class="demo-label">Renderização</div>
+      <dl style="margin:0"><dt style="font-weight:700">HTML</dt><dd style="margin-left:20px">HyperText Markup Language.</dd></dl>
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;figure&gt;</span> Figura autocontida</summary>
+  <div class="detail-body">
+    <p>Representa conteúdo autocontido — ilustração, diagrama, foto, trecho de código — opcionalmente com uma legenda via <code>&lt;figcaption&gt;</code>.</p>
+    <pre><code>&lt;figure&gt;
+  &lt;img src="diagrama.png" alt="Diagrama de fluxo"&gt;
+  &lt;figcaption&gt;Figura 1 — Diagrama de fluxo do processo.&lt;/figcaption&gt;
+&lt;/figure&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;figcaption&gt;</span> Legenda de figura</summary>
+  <div class="detail-body">
+    <p>Representa uma legenda ou descrição para o conteúdo de seu elemento pai <code>&lt;figure&gt;</code>.</p>
+    <pre><code>&lt;figure&gt;
+  &lt;pre&gt;&lt;code&gt;console.log("olá");&lt;/code&gt;&lt;/pre&gt;
+  &lt;figcaption&gt;Exemplo de console.log em JavaScript.&lt;/figcaption&gt;
+&lt;/figure&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;div&gt;</span> Divisão genérica</summary>
+  <div class="detail-body">
+    <p>Contêiner de fluxo genérico sem significado semântico. Use apenas quando nenhum outro elemento semântico for apropriado. Amplamente usado com CSS e JavaScript.</p>
+    <pre><code>&lt;div class="card" id="card-principal"&gt;
+  &lt;div class="card-header"&gt;Título&lt;/div&gt;
+  &lt;div class="card-body"&gt;Conteúdo&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  </div>
+</details>
+
+<!-- ─── INLINE ─── -->
+<h2 class="section-title" id="inline">Semântica de texto inline</h2>
+<p class="section-desc">Definem o significado, estrutura ou estilo de palavras, linhas ou outros fragmentos de texto.</p>
+
+<details>
+  <summary><span class="tag-badge">&lt;a&gt;</span> Âncora / Hyperlink</summary>
+  <div class="detail-body">
+    <p>Cria um hyperlink para páginas, arquivos, endereços de e-mail, locais na mesma página ou qualquer URL. O atributo <code>href</code> especifica o destino.</p>
+    <pre><code>&lt;a href="https://www.w3.org/" target="_blank" rel="noopener"&gt;W3C&lt;/a&gt;
+&lt;a href="mailto:contato@exemplo.com"&gt;Enviar e-mail&lt;/a&gt;
+&lt;a href="tel:+5519999999999"&gt;Ligar&lt;/a&gt;
+&lt;a href="#raiz"&gt;Ir ao topo&lt;/a&gt;
+&lt;a href="arquivo.pdf" download="relatorio"&gt;Baixar PDF&lt;/a&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;em&gt; / &lt;strong&gt;</span> Ênfase e importância</summary>
+  <div class="detail-body">
+    <p><strong>&lt;em&gt;</strong> indica ênfase (geralmente itálico). <strong>&lt;strong&gt;</strong> indica importância, urgência ou seriedade (geralmente negrito).</p>
+    <pre><code>&lt;p&gt;Você &lt;em&gt;deve&lt;/em&gt; ler este documento.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Atenção:&lt;/strong&gt; esta ação é irreversível.&lt;/p&gt;</code></pre>
+    <div class="demo-block">
+      <div class="demo-label">Renderização</div>
+      <p>Você <em>deve</em> ler este documento.</p>
+      <p><strong>Atenção:</strong> esta ação é irreversível.</p>
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;small&gt;</span> Texto pequeno / comentário</summary>
+  <div class="detail-body">
+    <p>Representa comentários laterais e letras miúdas como avisos de direitos autorais, isenções de responsabilidade, termos legais.</p>
+    <pre><code>&lt;p&gt;Preço: R$ 99,90 &lt;small&gt;(IVA incluído)&lt;/small&gt;&lt;/p&gt;
+&lt;small&gt;&amp;copy; 2025 Empresa. Todos os direitos reservados.&lt;/small&gt;</code></pre>
+    <div class="demo-block"><div class="demo-label">Renderização</div><p>Preço: R$ 99,90 <small>(IVA incluído)</small></p></div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;s&gt; / &lt;u&gt;</span> Tachado e sublinhado</summary>
+  <div class="detail-body">
+    <p><strong>&lt;s&gt;</strong> representa texto que não é mais relevante ou correto (tachado). <strong>&lt;u&gt;</strong> representa texto com anotação não-textual — por exemplo, indicar erro ortográfico ou nome em chinês.</p>
+    <pre><code>&lt;p&gt;De &lt;s&gt;R$ 199,00&lt;/s&gt; por R$ 99,00&lt;/p&gt;
+&lt;p&gt;Este texto tem &lt;u class="spelling-error"&gt;erro de ortografia&lt;/u&gt;.&lt;/p&gt;</code></pre>
+    <div class="demo-block"><div class="demo-label">Renderização</div><p>De <s>R$ 199,00</s> por R$ 99,00</p></div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;cite&gt;</span> Citação de obra</summary>
+  <div class="detail-body">
+    <p>Marca o título de uma obra criativa — livro, poema, filme, música, software, exposição etc.</p>
+    <pre><code>&lt;p&gt;Citado em &lt;cite&gt;A Arte da Guerra&lt;/cite&gt;, de Sun Tzu.&lt;/p&gt;</code></pre>
+    <div class="demo-block"><div class="demo-label">Renderização</div><p>Citado em <cite>A Arte da Guerra</cite>, de Sun Tzu.</p></div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;q&gt;</span> Citação inline</summary>
+  <div class="detail-body">
+    <p>Indica que o texto incluso é uma citação curta inline. Navegadores modernos envolvem o texto com aspas automaticamente.</p>
+    <pre><code>&lt;p&gt;Como disse Einstein: &lt;q cite="https://exemplo.com"&gt;A imaginação é mais importante que o conhecimento.&lt;/q&gt;&lt;/p&gt;</code></pre>
+    <div class="demo-block"><div class="demo-label">Renderização</div><p>Como disse Einstein: <q>A imaginação é mais importante que o conhecimento.</q></p></div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;dfn&gt;</span> Definição de termo</summary>
+  <div class="detail-body">
+    <p>Marca o termo sendo definido dentro de uma frase de definição ou sentença. O <code>title</code> fornece a definição completa.</p>
+    <pre><code>&lt;p&gt;&lt;dfn title="HyperText Markup Language"&gt;HTML&lt;/dfn&gt; é a linguagem padrão para criar páginas web.&lt;/p&gt;</code></pre>
+    <div class="demo-block"><div class="demo-label">Renderização</div><p><dfn title="HyperText Markup Language">HTML</dfn> é a linguagem padrão para criar páginas web.</p></div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;abbr&gt;</span> Abreviação</summary>
+  <div class="detail-body">
+    <p>Representa uma abreviação ou acrônimo. O atributo <code>title</code> fornece a expansão ou descrição completa.</p>
+    <pre><code>&lt;p&gt;O &lt;abbr title="World Wide Web Consortium"&gt;W3C&lt;/abbr&gt; define os padrões da web.&lt;/p&gt;</code></pre>
+    <div class="demo-block"><div class="demo-label">Renderização</div><p>O <abbr title="World Wide Web Consortium">W3C</abbr> define os padrões da web.</p></div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;ruby&gt; / &lt;rt&gt; / &lt;rp&gt;</span> Anotação Ruby (pronúncia)</summary>
+  <div class="detail-body">
+    <p><strong>&lt;ruby&gt;</strong> representa anotações de pronúncia de caracteres do Leste Asiático. <strong>&lt;rt&gt;</strong> é a pronúncia; <strong>&lt;rp&gt;</strong> fornece parênteses para navegadores sem suporte.</p>
+    <pre><code>&lt;ruby&gt;漢&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;かん&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;字&lt;rp&gt;(&lt;/rp&gt;&lt;rt&gt;じ&lt;/rt&gt;&lt;rp&gt;)&lt;/rp&gt;&lt;/ruby&gt;</code></pre>
+    <div class="demo-block"><div class="demo-label">Renderização</div><ruby>漢<rp>(</rp><rt>かん</rt><rp>)</rp>字<rp>(</rp><rt>じ</rt><rp>)</rp></ruby></div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;data&gt;</span> Dado com valor legível por máquina</summary>
+  <div class="detail-body">
+    <p>Vincula um conteúdo a sua representação legível por máquina via atributo <code>value</code>.</p>
+    <pre><code>&lt;ul&gt;
+  &lt;li&gt;&lt;data value="21053"&gt;Produto A&lt;/data&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;data value="21054"&gt;Produto B&lt;/data&gt;&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;time&gt;</span> Data e hora</summary>
+  <div class="detail-body">
+    <p>Representa um período de tempo específico. O atributo <code>datetime</code> deve ser um formato legível por máquina.</p>
+    <pre><code>&lt;p&gt;Publicado em &lt;time datetime="2025-04-20T09:00"&gt;20 de abril de 2025 às 9h&lt;/time&gt;.&lt;/p&gt;
+&lt;p&gt;A reunião dura &lt;time datetime="PT2H30M"&gt;2 horas e 30 minutos&lt;/time&gt;.&lt;/p&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;code&gt;</span> Código-fonte</summary>
+  <div class="detail-body">
+    <p>Exibe seu conteúdo em fonte monoespaçada, indicando que o texto é código de computador.</p>
+    <pre><code>&lt;p&gt;Use a função &lt;code&gt;getElementById()&lt;/code&gt; para selecionar um elemento.&lt;/p&gt;</code></pre>
+    <div class="demo-block"><div class="demo-label">Renderização</div><p>Use a função <code>getElementById()</code> para selecionar um elemento.</p></div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;var&gt;</span> Variável matemática/programação</summary>
+  <div class="detail-body">
+    <p>Representa o nome de uma variável em expressão matemática ou contexto de programação.</p>
+    <pre><code>&lt;p&gt;A equação é &lt;var&gt;a&lt;/var&gt;&lt;sup&gt;2&lt;/sup&gt; + &lt;var&gt;b&lt;/var&gt;&lt;sup&gt;2&lt;/sup&gt; = &lt;var&gt;c&lt;/var&gt;&lt;sup&gt;2&lt;/sup&gt;.&lt;/p&gt;</code></pre>
+    <div class="demo-block"><div class="demo-label">Renderização</div><p><var>a</var><sup>2</sup> + <var>b</var><sup>2</sup> = <var>c</var><sup>2</sup></p></div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;samp&gt;</span> Saída de programa</summary>
+  <div class="detail-body">
+    <p>Representa saída de exemplo de um programa de computador.</p>
+    <pre><code>&lt;p&gt;O terminal exibiu: &lt;samp&gt;Erro: arquivo não encontrado.&lt;/samp&gt;&lt;/p&gt;</code></pre>
+    <div class="demo-block"><div class="demo-label">Renderização</div><p>O terminal exibiu: <samp>Erro: arquivo não encontrado.</samp></p></div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;kbd&gt;</span> Entrada de teclado</summary>
+  <div class="detail-body">
+    <p>Representa entrada do usuário — tipicamente texto de teclado, mas também pode ser voz ou outro dispositivo.</p>
+    <pre><code>&lt;p&gt;Pressione &lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;C&lt;/kbd&gt; para copiar.&lt;/p&gt;</code></pre>
+    <div class="demo-block"><div class="demo-label">Renderização</div><p>Pressione <kbd style="background:#eee;border:1px solid #aaa;border-radius:3px;padding:1px 5px">Ctrl</kbd> + <kbd style="background:#eee;border:1px solid #aaa;border-radius:3px;padding:1px 5px">C</kbd> para copiar.</p></div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;sub&gt; / &lt;sup&gt;</span> Subscrito e sobrescrito</summary>
+  <div class="detail-body">
+    <p><strong>&lt;sub&gt;</strong> é subscrito (abaixo da linha de base); <strong>&lt;sup&gt;</strong> é sobrescrito (acima).</p>
+    <pre><code>&lt;p&gt;H&lt;sub&gt;2&lt;/sub&gt;O é a fórmula química da água.&lt;/p&gt;
+&lt;p&gt;10&lt;sup&gt;6&lt;/sup&gt; = um milhão.&lt;/p&gt;</code></pre>
+    <div class="demo-block"><div class="demo-label">Renderização</div><p>H<sub>2</sub>O &nbsp;|&nbsp; 10<sup>6</sup> = 1 000 000</p></div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;i&gt; / &lt;b&gt;</span> Itálico e negrito semânticos</summary>
+  <div class="detail-body">
+    <p><strong>&lt;i&gt;</strong> representa texto em voz ou humor alternativo — termos técnicos, estrangeirismos, pensamentos internos. <strong>&lt;b&gt;</strong> chama atenção sem importância extra — palavra-chave, nome de produto.</p>
+    <pre><code>&lt;p&gt;O conceito de &lt;i lang="la"&gt;tabula rasa&lt;/i&gt; foi popularizado por Locke.&lt;/p&gt;
+&lt;p&gt;Adquira o &lt;b&gt;Produto X Pro&lt;/b&gt; com desconto.&lt;/p&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;mark&gt;</span> Destaque / marcação</summary>
+  <div class="detail-body">
+    <p>Representa texto marcado ou destacado por razão de referência — como resultado de busca.</p>
+    <pre><code>&lt;p&gt;Resultado da busca: &lt;mark&gt;HTML&lt;/mark&gt; é a linguagem da web.&lt;/p&gt;</code></pre>
+    <div class="demo-block"><div class="demo-label">Renderização</div><p>Resultado: <mark>HTML</mark> é a linguagem da web.</p></div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;bdi&gt; / &lt;bdo&gt;</span> Isolamento e direção bidirecional</summary>
+  <div class="detail-body">
+    <p><strong>&lt;bdi&gt;</strong> isola um trecho que pode ter direção de texto diferente do seu entorno. <strong>&lt;bdo&gt;</strong> substitui a direção de texto atual.</p>
+    <pre><code>&lt;p&gt;Usuário &lt;bdi&gt;مرحبا&lt;/bdi&gt;: 10 pontos.&lt;/p&gt;
+&lt;p&gt;&lt;bdo dir="rtl"&gt;Este texto vai da direita para a esquerda&lt;/bdo&gt;&lt;/p&gt;</code></pre>
+    <div class="demo-block"><div class="demo-label">Renderização</div><p><bdo dir="rtl">Este texto vai da direita para a esquerda</bdo></p></div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;span&gt;</span> Contêiner inline genérico</summary>
+  <div class="detail-body">
+    <p>Contêiner inline genérico sem significado semântico. Útil para agrupar elementos para fins de estilo ou scripting.</p>
+    <pre><code>&lt;p&gt;Minha cor favorita é &lt;span style="color:royalblue"&gt;azul royal&lt;/span&gt;.&lt;/p&gt;</code></pre>
+    <div class="demo-block"><div class="demo-label">Renderização</div><p>Minha cor favorita é <span style="color:royalblue">azul royal</span>.</p></div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;br&gt; / &lt;wbr&gt;</span> Quebra de linha e oportunidade de quebra</summary>
+  <div class="detail-body">
+    <p><strong>&lt;br&gt;</strong> produz uma quebra de linha. <strong>&lt;wbr&gt;</strong> representa uma oportunidade de quebra de linha — o browser pode (mas não é obrigado a) quebrar ali.</p>
+    <pre><code>&lt;address&gt;
+  Rua das Flores, 123&lt;br&gt;
+  Campinas — SP, 13000-000
+&lt;/address&gt;
+
+&lt;p&gt;https://exemplo.com/um&lt;wbr&gt;/caminho&lt;wbr&gt;/muito&lt;wbr&gt;/longo&lt;/p&gt;</code></pre>
+  </div>
+</details>
+
+<!-- ─── MULTIMÍDIA ─── -->
+<h2 class="section-title" id="media">Imagem e multimídia</h2>
+<p class="section-desc">Elementos para incorporar imagens, áudio e vídeo nas páginas.</p>
+
+<details>
+  <summary><span class="tag-badge">&lt;img&gt;</span> Imagem</summary>
+  <div class="detail-body">
+    <p>Incorpora uma imagem. O atributo <code>alt</code> é obrigatório para acessibilidade. <code>loading="lazy"</code> ativa carregamento preguiçoso.</p>
+    <pre><code>&lt;img src="foto.jpg"
+     alt="Descrição da imagem"
+     width="800"
+     height="600"
+     loading="lazy"
+     decoding="async"&gt;
+
+&lt;!-- Imagem responsiva --&gt;
+&lt;img src="pequeno.jpg"
+     srcset="medio.jpg 800w, grande.jpg 1600w"
+     sizes="(max-width: 600px) 100vw, 50vw"
+     alt="Imagem responsiva"&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;audio&gt;</span> Áudio</summary>
+  <div class="detail-body">
+    <p>Incorpora conteúdo de áudio com controles nativos do navegador. Suporta múltiplos formatos via <code>&lt;source&gt;</code>.</p>
+    <pre><code>&lt;audio controls autoplay loop muted&gt;
+  &lt;source src="audio.ogg" type="audio/ogg"&gt;
+  &lt;source src="audio.mp3" type="audio/mpeg"&gt;
+  &lt;p&gt;Seu navegador não suporta áudio HTML5.&lt;/p&gt;
+&lt;/audio&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;video&gt;</span> Vídeo</summary>
+  <div class="detail-body">
+    <p>Incorpora conteúdo de vídeo. <code>poster</code> exibe uma imagem antes da reprodução. <code>playsinline</code> evita tela cheia em iOS.</p>
+    <pre><code>&lt;video controls width="720" poster="capa.jpg" preload="metadata"&gt;
+  &lt;source src="video.webm" type="video/webm"&gt;
+  &lt;source src="video.mp4" type="video/mp4"&gt;
+  &lt;track kind="subtitles" src="legendas-pt.vtt" srclang="pt" label="Português"&gt;
+  &lt;p&gt;Seu navegador não suporta vídeo HTML5.&lt;/p&gt;
+&lt;/video&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;track&gt;</span> Faixas de texto para mídia</summary>
+  <div class="detail-body">
+    <p>Especifica faixas de texto temporizadas para elementos <code>&lt;video&gt;</code> e <code>&lt;audio&gt;</code> — legendas, descrições, capítulos.</p>
+    <pre><code>&lt;video src="video.mp4" controls&gt;
+  &lt;track kind="subtitles"    src="sub-pt.vtt" srclang="pt" label="Português" default&gt;
+  &lt;track kind="subtitles"    src="sub-en.vtt" srclang="en" label="English"&gt;
+  &lt;track kind="chapters"     src="chapters.vtt" srclang="pt"&gt;
+  &lt;track kind="descriptions" src="desc.vtt" srclang="pt"&gt;
+&lt;/video&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;map&gt; / &lt;area&gt;</span> Mapa de imagem</summary>
+  <div class="detail-body">
+    <p><strong>&lt;map&gt;</strong> define um mapa de imagem clicável. <strong>&lt;area&gt;</strong> define as regiões clicáveis com formas (<code>rect</code>, <code>circle</code>, <code>poly</code>).</p>
+    <pre><code>&lt;img src="mapa.png" alt="Mapa" usemap="#mapas"&gt;
+&lt;map name="mapas"&gt;
+  &lt;area shape="rect"   coords="0,0,100,100"   href="/norte" alt="Norte"&gt;
+  &lt;area shape="circle" coords="200,200,50"     href="/centro" alt="Centro"&gt;
+  &lt;area shape="poly"   coords="300,0,400,50,350,100" href="/nordeste" alt="Nordeste"&gt;
+&lt;/map&gt;</code></pre>
+  </div>
+</details>
+
+<!-- ─── EMBED ─── -->
+<h2 class="section-title" id="embed">Conteúdo incorporado</h2>
+<p class="section-desc">Importam outro recurso ou inserem conteúdo de outra linguagem de marcação no documento.</p>
+
+<details>
+  <summary><span class="tag-badge">&lt;iframe&gt;</span> Frame embutido</summary>
+  <div class="detail-body">
+    <p>Incorpora outra página HTML dentro da atual. <code>sandbox</code> restringe capacidades. <code>allow</code> especifica permissões.</p>
+    <pre><code>&lt;iframe
+  src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+  width="560" height="315"
+  title="Vídeo do YouTube"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media"
+  allowfullscreen
+  loading="lazy"&gt;
+&lt;/iframe&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;embed&gt;</span> Ponto de incorporação externo</summary>
+  <div class="detail-body">
+    <p>Incorpora conteúdo externo de uma aplicação ou plugin. Menos usado hoje; prefira <code>&lt;video&gt;</code> e <code>&lt;audio&gt;</code> para mídia.</p>
+    <pre><code>&lt;embed type="video/webm" src="clipe.webm" width="480" height="360"&gt;
+&lt;embed type="application/pdf" src="doc.pdf" width="800" height="600"&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;object&gt;</span> Objeto externo</summary>
+  <div class="detail-body">
+    <p>Representa um recurso externo que pode ser tratado como imagem, contexto de navegação aninhado ou recurso tratado por plugin.</p>
+    <pre><code>&lt;object data="grafico.svg" type="image/svg+xml" width="300" height="200"&gt;
+  &lt;img src="grafico-fallback.png" alt="Gráfico de barras"&gt;
+&lt;/object&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;picture&gt;</span> Imagem responsiva</summary>
+  <div class="detail-body">
+    <p>Contém zero ou mais elementos <code>&lt;source&gt;</code> e um <code>&lt;img&gt;</code> para oferecer versões alternativas de imagem para diferentes condições de exibição.</p>
+    <pre><code>&lt;picture&gt;
+  &lt;source media="(min-width: 1200px)" srcset="imagem-xl.webp" type="image/webp"&gt;
+  &lt;source media="(min-width: 600px)"  srcset="imagem-md.webp" type="image/webp"&gt;
+  &lt;source srcset="imagem-sm.webp" type="image/webp"&gt;
+  &lt;img src="imagem-sm.jpg" alt="Paisagem" loading="lazy"&gt;
+&lt;/picture&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;source&gt;</span> Fonte de mídia alternativa</summary>
+  <div class="detail-body">
+    <p>Especifica múltiplos recursos de mídia para <code>&lt;picture&gt;</code>, <code>&lt;audio&gt;</code> e <code>&lt;video&gt;</code>.</p>
+    <pre><code>&lt;video controls&gt;
+  &lt;source src="video.av1.mp4" type="video/mp4; codecs=av01"&gt;
+  &lt;source src="video.webm"    type="video/webm"&gt;
+  &lt;source src="video.mp4"     type="video/mp4"&gt;
+&lt;/video&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;portal&gt;</span> Portal de navegação (experimental)</summary>
+  <div class="detail-body">
+    <p>Permite incorporar outra página HTML com transições de navegação suaves. Experimental — suporte limitado.</p>
+    <pre><code>&lt;portal id="meu-portal" src="https://exemplo.com/pagina"&gt;&lt;/portal&gt;
+&lt;script&gt;
+  document.getElementById('meu-portal').activate();
+&lt;/script&gt;</code></pre>
+  </div>
+</details>
+
+<!-- ─── SVG / MATHML ─── -->
+<h2 class="section-title" id="svg">SVG e MathML</h2>
+<p class="section-desc">Incorporam gráficos vetoriais e expressões matemáticas diretamente no HTML.</p>
+
+<details>
+  <summary><span class="tag-badge">&lt;svg&gt;</span> Gráfico vetorial escalável</summary>
+  <div class="detail-body">
+    <p>Contém gráficos vetoriais SVG inline. Permite uso de CSS, JavaScript e eventos diretamente nos elementos.</p>
+    <pre><code>&lt;svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg" width="200" height="100"&gt;
+  &lt;rect x="10" y="10" width="80" height="80" fill="#0055aa" rx="8"/&gt;
+  &lt;circle cx="150" cy="50" r="40" fill="#0077cc" opacity="0.8"/&gt;
+  &lt;text x="50" y="108" font-size="12" fill="#333" text-anchor="middle"&gt;SVG&lt;/text&gt;
+&lt;/svg&gt;</code></pre>
+    <div class="demo-block">
+      <div class="demo-label">Renderização</div>
+      <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg" width="200" height="100">
+        <rect x="10" y="10" width="80" height="80" fill="#0055aa" rx="8"/>
+        <circle cx="150" cy="50" r="40" fill="#0077cc" opacity="0.8"/>
+      </svg>
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;math&gt;</span> Expressão matemática (MathML)</summary>
+  <div class="detail-body">
+    <p>Raiz de um fragmento MathML. Permite exibir notações matemáticas complexas nativamente no HTML5.</p>
+    <pre><code>&lt;math xmlns="http://www.w3.org/1998/Math/MathML"&gt;
+  &lt;mfrac&gt;
+    &lt;mrow&gt;
+      &lt;mo&gt;-&lt;/mo&gt;&lt;mi&gt;b&lt;/mi&gt;
+      &lt;mo&gt;&amp;pm;&lt;/mo&gt;
+      &lt;msqrt&gt;
+        &lt;mrow&gt;&lt;msup&gt;&lt;mi&gt;b&lt;/mi&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/msup&gt;&lt;mo&gt;-&lt;/mo&gt;&lt;mn&gt;4&lt;/mn&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;/mrow&gt;
+      &lt;/msqrt&gt;
+    &lt;/mrow&gt;
+    &lt;mrow&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;/mrow&gt;
+  &lt;/mfrac&gt;
+&lt;/math&gt;</code></pre>
+    <div class="demo-block">
+      <div class="demo-label">Renderização (fórmula de Bhaskara)</div>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <mfrac><mrow><mo>-</mo><mi>b</mi><mo>±</mo><msqrt><mrow><msup><mi>b</mi><mn>2</mn></msup><mo>-</mo><mn>4</mn><mi>a</mi><mi>c</mi></mrow></msqrt></mrow><mrow><mn>2</mn><mi>a</mi></mrow></mfrac>
+      </math>
+    </div>
+  </div>
+</details>
+
+<!-- ─── SCRIPTS ─── -->
+<h2 class="section-title" id="scripts">Scripts</h2>
+<p class="section-desc">Definem scripts executáveis, fallbacks, templates e contextos de renderização dinâmica.</p>
+
+<details>
+  <summary><span class="tag-badge">&lt;script&gt;</span> Script</summary>
+  <div class="detail-body">
+    <p>Incorpora ou referencia código executável — geralmente JavaScript. Atributos <code>defer</code> e <code>async</code> controlam o carregamento.</p>
+    <pre><code>&lt;!-- Externo com defer (executa após o parse do HTML) --&gt;
+&lt;script src="app.js" defer type="module"&gt;&lt;/script&gt;
+
+&lt;!-- Externo com async (executa assim que carrega) --&gt;
+&lt;script src="analytics.js" async&gt;&lt;/script&gt;
+
+&lt;!-- Inline --&gt;
+&lt;script&gt;
+  document.addEventListener('DOMContentLoaded', () =&gt; {
+    console.log('DOM pronto!');
+  });
+&lt;/script&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;noscript&gt;</span> Fallback sem JavaScript</summary>
+  <div class="detail-body">
+    <p>Define conteúdo alternativo exibido quando o JavaScript está desativado ou não suportado.</p>
+    <pre><code>&lt;noscript&gt;
+  &lt;p&gt;&lt;strong&gt;Atenção:&lt;/strong&gt; Este site requer JavaScript para funcionar corretamente.
+  &lt;a href="/sem-js"&gt;Versão sem JavaScript&lt;/a&gt;&lt;/p&gt;
+&lt;/noscript&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;template&gt;</span> Template de conteúdo</summary>
+  <div class="detail-body">
+    <p>Mecanismo para declarar fragmentos de HTML que não são renderizados quando a página carrega, mas podem ser instanciados via JavaScript.</p>
+    <pre><code>&lt;template id="cartao-template"&gt;
+  &lt;div class="cartao"&gt;
+    &lt;h3 class="nome"&gt;&lt;/h3&gt;
+    &lt;p class="descricao"&gt;&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+  const tmpl = document.getElementById('cartao-template');
+  const clone = tmpl.content.cloneNode(true);
+  clone.querySelector('.nome').textContent = 'Produto X';
+  document.body.appendChild(clone);
+&lt;/script&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;slot&gt;</span> Slot de Web Component</summary>
+  <div class="detail-body">
+    <p>Define um ponto de inserção em um Web Component (Shadow DOM) onde o conteúdo fornecido pelo usuário será inserido.</p>
+    <pre><code>&lt;!-- No Shadow DOM do Web Component --&gt;
+&lt;template id="meu-componente"&gt;
+  &lt;style&gt;:host { display: block; }&lt;/style&gt;
+  &lt;div class="wrapper"&gt;
+    &lt;slot name="titulo"&gt;Título padrão&lt;/slot&gt;
+    &lt;slot&gt;Conteúdo padrão&lt;/slot&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;!-- Uso do componente --&gt;
+&lt;meu-elemento&gt;
+  &lt;span slot="titulo"&gt;Meu Título&lt;/span&gt;
+  &lt;p&gt;Meu conteúdo personalizado.&lt;/p&gt;
+&lt;/meu-elemento&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;canvas&gt;</span> Área de desenho bitmap</summary>
+  <div class="detail-body">
+    <p>Elemento de bitmap que pode ser usado para renderizar gráficos, animações, jogos e composição de imagens via JavaScript (API Canvas 2D ou WebGL).</p>
+    <pre><code>&lt;canvas id="meuCanvas" width="400" height="200"&gt;
+  Seu navegador não suporta canvas.
+&lt;/canvas&gt;
+
+&lt;script&gt;
+  const canvas = document.getElementById('meuCanvas');
+  const ctx = canvas.getContext('2d');
+
+  // Gradiente
+  const grad = ctx.createLinearGradient(0, 0, 400, 0);
+  grad.addColorStop(0, '#003366');
+  grad.addColorStop(1, '#0077cc');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, 400, 200);
+
+  // Texto
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 28px Roboto';
+  ctx.fillText('&lt;canvas&gt;', 140, 110);
+&lt;/script&gt;</code></pre>
+    <div class="demo-block">
+      <div class="demo-label">Renderização</div>
+      <canvas id="demoCanvas" width="360" height="80" style="border-radius:5px;display:block"></canvas>
+      <script>
+        (function(){
+          const c = document.getElementById('demoCanvas');
+          if(!c) return;
+          const ctx = c.getContext('2d');
+          const g = ctx.createLinearGradient(0,0,360,0);
+          g.addColorStop(0,'#003366'); g.addColorStop(1,'#0077cc');
+          ctx.fillStyle = g; ctx.fillRect(0,0,360,80);
+          ctx.fillStyle='#fff'; ctx.font='bold 22px Roboto,sans-serif';
+          ctx.fillText('<canvas> renderizado!', 70, 48);
+        })();
+      </script>
+    </div>
+  </div>
+</details>
+
+<!-- ─── TABELAS ─── -->
+<h2 class="section-title" id="tabelas">Conteúdo de tabela</h2>
+<p class="section-desc">Estruturam dados tabulares em linhas e colunas com semântica adequada.</p>
+
+<details>
+  <summary><span class="tag-badge">&lt;table&gt;</span> Tabela</summary>
+  <div class="detail-body">
+    <p>Representa dados tabulares bidimensionais. Use apenas para dados — nunca para layout de página.</p>
+    <pre><code>&lt;table&gt;
+  &lt;caption&gt;Vendas por Trimestre&lt;/caption&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;&lt;th scope="col"&gt;Produto&lt;/th&gt;&lt;th scope="col"&gt;T1&lt;/th&gt;&lt;th scope="col"&gt;T2&lt;/th&gt;&lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;&lt;td&gt;Widget A&lt;/td&gt;&lt;td&gt;R$ 1.200&lt;/td&gt;&lt;td&gt;R$ 1.500&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Widget B&lt;/td&gt;&lt;td&gt;R$ 800&lt;/td&gt;&lt;td&gt;R$ 950&lt;/td&gt;&lt;/tr&gt;
+  &lt;/tbody&gt;
+  &lt;tfoot&gt;
+    &lt;tr&gt;&lt;th scope="row"&gt;Total&lt;/th&gt;&lt;td&gt;R$ 2.000&lt;/td&gt;&lt;td&gt;R$ 2.450&lt;/td&gt;&lt;/tr&gt;
+  &lt;/tfoot&gt;
+&lt;/table&gt;</code></pre>
+    <div class="demo-block">
+      <div class="demo-label">Renderização</div>
+      <table style="border-collapse:collapse;font-size:.85rem;width:100%">
+        <thead><tr style="background:#0055aa;color:#fff"><th style="padding:6px 10px">Produto</th><th style="padding:6px 10px">T1</th><th style="padding:6px 10px">T2</th></tr></thead>
+        <tbody>
+          <tr style="background:#fff8"><td style="padding:5px 10px;border:1px solid #bcd">Widget A</td><td style="padding:5px 10px;border:1px solid #bcd">R$ 1.200</td><td style="padding:5px 10px;border:1px solid #bcd">R$ 1.500</td></tr>
+          <tr style="background:#eef6ff"><td style="padding:5px 10px;border:1px solid #bcd">Widget B</td><td style="padding:5px 10px;border:1px solid #bcd">R$ 800</td><td style="padding:5px 10px;border:1px solid #bcd">R$ 950</td></tr>
+        </tbody>
+        <tfoot><tr style="background:#ddd"><th style="padding:5px 10px">Total</th><td style="padding:5px 10px">R$ 2.000</td><td style="padding:5px 10px">R$ 2.450</td></tr></tfoot>
+      </table>
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;caption&gt;</span> Legenda da tabela</summary>
+  <div class="detail-body">
+    <p>Especifica o título ou legenda de uma tabela. Deve ser o primeiro filho de <code>&lt;table&gt;</code>.</p>
+    <pre><code>&lt;table&gt;
+  &lt;caption&gt;Estatísticas de Acesso — Abril 2025&lt;/caption&gt;
+  ...
+&lt;/table&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;colgroup&gt; / &lt;col&gt;</span> Grupo de colunas</summary>
+  <div class="detail-body">
+    <p><strong>&lt;colgroup&gt;</strong> agrupa colunas para aplicar estilos em grupo. <strong>&lt;col&gt;</strong> representa cada coluna.</p>
+    <pre><code>&lt;table&gt;
+  &lt;colgroup&gt;
+    &lt;col style="background-color:#e8f4ff; width:40%"&gt;
+    &lt;col span="2" style="background-color:#f0f8e8"&gt;
+  &lt;/colgroup&gt;
+  ...
+&lt;/table&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;thead&gt; / &lt;tbody&gt; / &lt;tfoot&gt;</span> Grupos de linhas</summary>
+  <div class="detail-body">
+    <p>Agrupam linhas de tabela em cabeçalho, corpo e rodapé, melhorando acessibilidade e permitindo scroll independente do corpo.</p>
+    <pre><code>&lt;table&gt;
+  &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Nome&lt;/th&gt;&lt;th&gt;Valor&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;&lt;td&gt;Alpha&lt;/td&gt;&lt;td&gt;100&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Beta&lt;/td&gt;&lt;td&gt;200&lt;/td&gt;&lt;/tr&gt;
+  &lt;/tbody&gt;
+  &lt;tfoot&gt;&lt;tr&gt;&lt;th&gt;Total&lt;/th&gt;&lt;td&gt;300&lt;/td&gt;&lt;/tr&gt;&lt;/tfoot&gt;
+&lt;/table&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;tr&gt;</span> Linha de tabela</summary>
+  <div class="detail-body">
+    <p>Define uma linha de células em uma tabela. Deve conter <code>&lt;td&gt;</code> e/ou <code>&lt;th&gt;</code>.</p>
+    <pre><code>&lt;tr&gt;
+  &lt;th scope="row"&gt;João Silva&lt;/th&gt;
+  &lt;td&gt;Desenvolvedor&lt;/td&gt;
+  &lt;td&gt;São Paulo&lt;/td&gt;
+&lt;/tr&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;td&gt; / &lt;th&gt;</span> Célula de dado e cabeçalho</summary>
+  <div class="detail-body">
+    <p><strong>&lt;td&gt;</strong> é uma célula de dado; <strong>&lt;th&gt;</strong> é uma célula de cabeçalho. <code>colspan</code> e <code>rowspan</code> mesclam células.</p>
+    <pre><code>&lt;tr&gt;
+  &lt;th scope="col" rowspan="2"&gt;Região&lt;/th&gt;
+  &lt;th scope="col" colspan="2"&gt;Vendas&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+  &lt;th scope="col"&gt;T1&lt;/th&gt;
+  &lt;th scope="col"&gt;T2&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+  &lt;td&gt;Sul&lt;/td&gt;
+  &lt;td&gt;R$ 5.000&lt;/td&gt;
+  &lt;td&gt;R$ 6.200&lt;/td&gt;
+&lt;/tr&gt;</code></pre>
+  </div>
+</details>
+
+<!-- ─── FORMULÁRIOS ─── -->
+<h2 class="section-title" id="forms">Formulários</h2>
+<p class="section-desc">Permitem ao usuário inserir e enviar dados para o servidor.</p>
+
+<details>
+  <summary><span class="tag-badge">&lt;form&gt;</span> Formulário</summary>
+  <div class="detail-body">
+    <p>Representa um formulário HTML com controles interativos para envio de informações. <code>action</code> define o destino; <code>method</code> define o método HTTP.</p>
+    <pre><code>&lt;form action="/enviar" method="post" enctype="multipart/form-data"
+      autocomplete="on" novalidate&gt;
+  &lt;!-- campos aqui --&gt;
+  &lt;button type="submit"&gt;Enviar&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;label&gt;</span> Rótulo de controle</summary>
+  <div class="detail-body">
+    <p>Representa um rótulo para um item da interface. Associe com <code>for</code> + <code>id</code> ou envolva o controle. Melhora acessibilidade e área de clique.</p>
+    <pre><code>&lt;label for="email"&gt;E-mail:&lt;/label&gt;
+&lt;input type="email" id="email" name="email"&gt;
+
+&lt;!-- Ou envolvendo --&gt;
+&lt;label&gt;
+  &lt;input type="checkbox" name="aceitar"&gt; Aceito os termos
+&lt;/label&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;input&gt;</span> Campo de entrada</summary>
+  <div class="detail-body">
+    <p>Cria controles interativos para formulários. O atributo <code>type</code> define o comportamento. HTML5 adicionou: <code>email</code>, <code>url</code>, <code>tel</code>, <code>number</code>, <code>range</code>, <code>date</code>, <code>time</code>, <code>color</code>, <code>search</code>.</p>
+    <pre><code>&lt;!-- Tipos HTML5 --&gt;
+&lt;input type="text"     placeholder="Nome completo"&gt;
+&lt;input type="email"    placeholder="email@exemplo.com" required&gt;
+&lt;input type="password" minlength="8" autocomplete="new-password"&gt;
+&lt;input type="number"   min="0" max="100" step="5" value="50"&gt;
+&lt;input type="range"    min="0" max="100" value="70"&gt;
+&lt;input type="date"     value="2025-04-20"&gt;
+&lt;input type="time"     value="14:30"&gt;
+&lt;input type="datetime-local" value="2025-04-20T14:30"&gt;
+&lt;input type="month"    value="2025-04"&gt;
+&lt;input type="week"     value="2025-W16"&gt;
+&lt;input type="color"    value="#bbddff"&gt;
+&lt;input type="tel"      pattern="[0-9]{2}-[0-9]{5}-[0-9]{4}"&gt;
+&lt;input type="url"      placeholder="https://"&gt;
+&lt;input type="search"   placeholder="Buscar..."&gt;
+&lt;input type="file"     accept="image/*" multiple&gt;
+&lt;input type="checkbox" checked&gt;
+&lt;input type="radio"    name="opcao" value="a"&gt;
+&lt;input type="hidden"   name="token" value="abc123"&gt;
+&lt;input type="submit"   value="Enviar"&gt;
+&lt;input type="reset"    value="Limpar"&gt;
+&lt;input type="button"   value="Clique"&gt;
+&lt;input type="image"    src="btn.png" alt="Enviar"&gt;</code></pre>
+    <div class="demo-block">
+      <div class="demo-label">Alguns tipos renderizados</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+        <input type="range" min="0" max="100" value="60" style="width:120px">
+        <input type="color" value="#0055aa">
+        <input type="date" value="2025-04-20" style="font-size:.8rem">
+        <input type="number" min="0" max="10" value="3" style="width:60px">
+      </div>
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;button&gt;</span> Botão</summary>
+  <div class="detail-body">
+    <p>Elemento de botão clicável. Pode conter HTML. <code>type</code>: <code>submit</code> (padrão), <code>reset</code>, <code>button</code>.</p>
+    <pre><code>&lt;button type="submit"&gt;Salvar&lt;/button&gt;
+&lt;button type="reset"&gt;Limpar&lt;/button&gt;
+&lt;button type="button" onclick="abrir()"&gt;
+  &lt;svg ...&gt;&lt;/svg&gt; Abrir Modal
+&lt;/button&gt;
+&lt;button type="button" disabled&gt;Indisponível&lt;/button&gt;</code></pre>
+    <div class="demo-block">
+      <div class="demo-label">Renderização</div>
+      <button type="button" style="background:#0055aa;color:#fff;border:none;padding:7px 18px;border-radius:5px;cursor:pointer;font-family:Roboto,sans-serif">Botão exemplo</button>
+      <button type="button" disabled style="background:#ccc;color:#888;border:none;padding:7px 18px;border-radius:5px;margin-left:8px">Desabilitado</button>
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;select&gt;</span> Lista de seleção</summary>
+  <div class="detail-body">
+    <p>Representa um controle com menu de opções. <code>multiple</code> permite seleção múltipla; <code>size</code> define a altura visível.</p>
+    <pre><code>&lt;select name="estado" required&gt;
+  &lt;option value=""&gt;Selecione um estado&lt;/option&gt;
+  &lt;optgroup label="Sudeste"&gt;
+    &lt;option value="SP"&gt;São Paulo&lt;/option&gt;
+    &lt;option value="RJ"&gt;Rio de Janeiro&lt;/option&gt;
+  &lt;/optgroup&gt;
+  &lt;optgroup label="Sul"&gt;
+    &lt;option value="PR"&gt;Paraná&lt;/option&gt;
+  &lt;/optgroup&gt;
+&lt;/select&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;datalist&gt;</span> Lista de sugestões</summary>
+  <div class="detail-body">
+    <p>Contém um conjunto de elementos <code>&lt;option&gt;</code> que representam valores sugeridos (mas não obrigatórios) para outros controles.</p>
+    <pre><code>&lt;label for="cidade"&gt;Cidade:&lt;/label&gt;
+&lt;input type="text" id="cidade" list="cidades" name="cidade"&gt;
+&lt;datalist id="cidades"&gt;
+  &lt;option value="Campinas"&gt;
+  &lt;option value="São Paulo"&gt;
+  &lt;option value="Rio de Janeiro"&gt;
+  &lt;option value="Belo Horizonte"&gt;
+&lt;/datalist&gt;</code></pre>
+    <div class="demo-block">
+      <div class="demo-label">Renderização (digite para ver sugestões)</div>
+      <input type="text" list="demo-cidades" placeholder="Digite uma cidade..." style="padding:5px;border-radius:4px;border:1px solid #aac;font-size:.85rem">
+      <datalist id="demo-cidades">
+        <option value="Campinas"><option value="São Paulo"><option value="Rio de Janeiro"><option value="Belo Horizonte">
+      </datalist>
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;optgroup&gt; / &lt;option&gt;</span> Grupos e opções</summary>
+  <div class="detail-body">
+    <p><strong>&lt;optgroup&gt;</strong> agrupa opções dentro de <code>&lt;select&gt;</code>. <strong>&lt;option&gt;</strong> define cada opção. Também usado em <code>&lt;datalist&gt;</code>.</p>
+    <pre><code>&lt;select&gt;
+  &lt;optgroup label="Frutas"&gt;
+    &lt;option value="maca" selected&gt;Maçã&lt;/option&gt;
+    &lt;option value="banana"&gt;Banana&lt;/option&gt;
+  &lt;/optgroup&gt;
+  &lt;optgroup label="Verduras" disabled&gt;
+    &lt;option value="alface"&gt;Alface&lt;/option&gt;
+  &lt;/optgroup&gt;
+&lt;/select&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;textarea&gt;</span> Área de texto</summary>
+  <div class="detail-body">
+    <p>Representa um controle de edição de texto de múltiplas linhas. <code>rows</code> e <code>cols</code> definem o tamanho inicial.</p>
+    <pre><code>&lt;textarea
+  name="mensagem"
+  rows="6"
+  cols="40"
+  minlength="10"
+  maxlength="500"
+  placeholder="Escreva sua mensagem aqui..."
+  wrap="soft"
+  spellcheck="true"&gt;
+&lt;/textarea&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;output&gt;</span> Resultado de cálculo</summary>
+  <div class="detail-body">
+    <p>Representa o resultado de um cálculo ou ação do usuário. Associe com <code>for</code> referenciando os IDs dos inputs envolvidos.</p>
+    <pre><code>&lt;form oninput="resultado.value = parseInt(a.value) + parseInt(b.value)"&gt;
+  &lt;input type="range" id="a" name="a" value="50" min="0" max="100"&gt; +
+  &lt;input type="number" id="b" name="b" value="10" min="0" max="100"&gt; =
+  &lt;output name="resultado" for="a b"&gt;60&lt;/output&gt;
+&lt;/form&gt;</code></pre>
+    <div class="demo-block">
+      <div class="demo-label">Renderização</div>
+      <form oninput="res1.value=parseInt(s1.value)+parseInt(n1.value)">
+        <input type="range" id="s1" value="50" min="0" max="100" style="width:100px"> +
+        <input type="number" id="n1" value="10" min="0" max="100" style="width:60px"> =
+        <output name="res1" id="res1" for="s1 n1">60</output>
+      </form>
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;progress&gt;</span> Barra de progresso</summary>
+  <div class="detail-body">
+    <p>Exibe o progresso de uma tarefa. Sem <code>value</code>, mostra estado indeterminado (animado).</p>
+    <pre><code>&lt;!-- Determinado --&gt;
+&lt;progress value="70" max="100"&gt;70%&lt;/progress&gt;
+
+&lt;!-- Indeterminado (carregando...) --&gt;
+&lt;progress&gt;&lt;/progress&gt;</code></pre>
+    <div class="demo-block">
+      <div class="demo-label">Renderização</div>
+      <progress value="70" max="100" style="width:200px">70%</progress><br>
+      <progress style="width:200px;margin-top:6px"></progress>
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;meter&gt;</span> Medidor escalar</summary>
+  <div class="detail-body">
+    <p>Representa um valor escalar dentro de um intervalo conhecido — uso de disco, relevância de busca, nível de bateria. Diferente de <code>&lt;progress&gt;</code>, não representa uma tarefa.</p>
+    <pre><code>&lt;meter value="0.7" min="0" max="1" low="0.3" high="0.8" optimum="0.9"&gt;70%&lt;/meter&gt;
+&lt;meter value="10"  min="0" max="100" low="25" high="75"&gt;10 de 100&lt;/meter&gt;</code></pre>
+    <div class="demo-block">
+      <div class="demo-label">Renderização</div>
+      <meter value="0.7" min="0" max="1" low="0.3" high="0.8" optimum="0.9" style="width:200px">70%</meter><br>
+      <meter value="10" min="0" max="100" low="25" high="75" style="width:200px;margin-top:5px">10/100</meter>
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;fieldset&gt;</span> Grupo de controles</summary>
+  <div class="detail-body">
+    <p>Agrupa controles relacionados em um formulário, geralmente com uma legenda via <code>&lt;legend&gt;</code>. <code>disabled</code> desabilita todos os controles filhos.</p>
+    <pre><code>&lt;fieldset&gt;
+  &lt;legend&gt;Dados Pessoais&lt;/legend&gt;
+  &lt;label&gt;Nome: &lt;input type="text" name="nome"&gt;&lt;/label&gt;
+  &lt;label&gt;E-mail: &lt;input type="email" name="email"&gt;&lt;/label&gt;
+&lt;/fieldset&gt;
+
+&lt;fieldset disabled&gt;
+  &lt;legend&gt;Seção desabilitada&lt;/legend&gt;
+  &lt;input type="text" value="Não editável"&gt;
+&lt;/fieldset&gt;</code></pre>
+    <div class="demo-block">
+      <div class="demo-label">Renderização</div>
+      <fieldset style="border:2px solid #88bbee;border-radius:6px;padding:10px">
+        <legend style="font-weight:600;padding:0 6px">Dados Pessoais</legend>
+        <label style="display:block;margin-bottom:5px;font-size:.85rem">Nome: <input type="text" placeholder="Seu nome" style="margin-left:6px;padding:3px;border-radius:3px;border:1px solid #aac"></label>
+        <label style="font-size:.85rem">E-mail: <input type="email" placeholder="email@exemplo.com" style="margin-left:6px;padding:3px;border-radius:3px;border:1px solid #aac"></label>
+      </fieldset>
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;legend&gt;</span> Legenda do fieldset</summary>
+  <div class="detail-body">
+    <p>Representa uma legenda para o conteúdo de seu <code>&lt;fieldset&gt;</code> pai.</p>
+    <pre><code>&lt;fieldset&gt;
+  &lt;legend&gt;Preferências de Notificação&lt;/legend&gt;
+  &lt;label&gt;&lt;input type="checkbox" name="email"&gt; E-mail&lt;/label&gt;
+  &lt;label&gt;&lt;input type="checkbox" name="sms"&gt; SMS&lt;/label&gt;
+&lt;/fieldset&gt;</code></pre>
+  </div>
+</details>
+
+<!-- ─── INTERATIVOS ─── -->
+<h2 class="section-title" id="interativos">Elementos interativos</h2>
+<p class="section-desc">Elementos que criam widgets de interface interativos nativos.</p>
+
+<details>
+  <summary><span class="tag-badge">&lt;details&gt;</span> Widget de revelação</summary>
+  <div class="detail-body">
+    <p>Cria um widget de divulgação no qual o conteúdo só é visível quando está no estado "aberto". O atributo <code>open</code> torna visível por padrão. É exatamente este elemento que está sendo usado em toda esta página!</p>
+    <pre><code>&lt;details&gt;
+  &lt;summary&gt;Clique para expandir&lt;/summary&gt;
+  &lt;p&gt;Este conteúdo está oculto inicialmente.&lt;/p&gt;
+&lt;/details&gt;
+
+&lt;details open&gt;
+  &lt;summary&gt;Já expandido&lt;/summary&gt;
+  &lt;p&gt;Este conteúdo aparece imediatamente.&lt;/p&gt;
+&lt;/details&gt;</code></pre>
+    <div class="demo-block">
+      <div class="demo-label">Renderização</div>
+      <details style="border:1px solid #88bbee;border-radius:5px;padding:8px">
+        <summary>Clique para expandir</summary>
+        <p style="margin-top:8px">Este conteúdo estava oculto!</p>
+      </details>
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;summary&gt;</span> Resumo do details</summary>
+  <div class="detail-body">
+    <p>Define um resumo, legenda ou rótulo para o elemento <code>&lt;details&gt;</code> pai. Clicável para alternar o estado aberto/fechado.</p>
+    <pre><code>&lt;details&gt;
+  &lt;summary&gt;&lt;strong&gt;Aviso importante&lt;/strong&gt; ⚠️&lt;/summary&gt;
+  &lt;p&gt;Conteúdo detalhado do aviso aqui.&lt;/p&gt;
+&lt;/details&gt;</code></pre>
+  </div>
+</details>
+
+<details>
+  <summary><span class="tag-badge">&lt;dialog&gt;</span> Caixa de diálogo</summary>
+  <div class="detail-body">
+    <p>Representa uma caixa de diálogo ou componente interativo (modal). Métodos: <code>show()</code>, <code>showModal()</code>, <code>close()</code>.</p>
+    <pre><code>&lt;dialog id="meuDialog"&gt;
+  &lt;h2&gt;Confirmar ação&lt;/h2&gt;
+  &lt;p&gt;Tem certeza que deseja continuar?&lt;/p&gt;
+  &lt;button onclick="document.getElementById('meuDialog').close()"&gt;Fechar&lt;/button&gt;
+  &lt;button autofocus&gt;Confirmar&lt;/button&gt;
+&lt;/dialog&gt;
+
+&lt;button onclick="document.getElementById('meuDialog').showModal()"&gt;
+  Abrir modal
+&lt;/button&gt;</code></pre>
+    <div class="demo-block">
+      <div class="demo-label">Renderização</div>
+      <button onclick="document.getElementById('demoDialog').showModal()" style="background:#0055aa;color:#fff;border:none;padding:7px 16px;border-radius:5px;cursor:pointer;font-family:Roboto,sans-serif">Abrir &lt;dialog&gt;</button>
+      <dialog id="demoDialog" style="border-radius:10px;border:2px solid #0055aa;padding:24px;min-width:260px;font-family:Roboto,sans-serif">
+        <h3 style="margin-bottom:10px;color:#003366">Elemento &lt;dialog&gt;</h3>
+        <p style="margin-bottom:16px;font-size:.9rem">Este é um modal nativo HTML5!</p>
+        <button onclick="document.getElementById('demoDialog').close()" style="background:#0055aa;color:#fff;border:none;padding:7px 18px;border-radius:5px;cursor:pointer">Fechar</button>
+      </dialog>
+    </div>
+  </div>
+</details>
+
+<!-- ─── OBSOLETOS ─── -->
+<h2 class="section-title" id="obsoletos">Elementos obsoletos / descontinuados</h2>
+<p class="section-desc">Não use estes elementos. São listados apenas para referência histórica. Foram removidos ou descontinuados no HTML5.</p>
+
+<details>
+  <summary><span class="tag-badge" style="background:#aa2200">&lt;acronym&gt;</span> Use &lt;abbr&gt; em vez disso</summary>
+  <div class="detail-body"><p>Substituído por <code>&lt;abbr&gt;</code>.</p></div>
+</details>
+<details>
+  <summary><span class="tag-badge" style="background:#aa2200">&lt;applet&gt;</span> Applet Java (removido)</summary>
+  <div class="detail-body"><p>Incorporava applets Java. Removido do HTML5. Use <code>&lt;canvas&gt;</code>, WebAssembly ou APIs nativas.</p></div>
+</details>
+<details>
+  <summary><span class="tag-badge" style="background:#aa2200">&lt;basefont&gt;</span> Fonte base (removido)</summary>
+  <div class="detail-body"><p>Definia a fonte padrão do documento. Removido. Use CSS: <code>body { font-family: ... }</code>.</p></div>
+</details>
+<details>
+  <summary><span class="tag-badge" style="background:#aa2200">&lt;bgsound&gt;</span> Som de fundo (nunca padronizado)</summary>
+  <div class="detail-body"><p>Extensão do IE para som de fundo. Nunca foi padrão. Use <code>&lt;audio&gt;</code>.</p></div>
+</details>
+<details>
+  <summary><span class="tag-badge" style="background:#aa2200">&lt;big&gt;</span> Texto grande (removido)</summary>
+  <div class="detail-body"><p>Aumentava o tamanho do texto. Removido. Use CSS: <code>font-size</code>.</p></div>
+</details>
+<details>
+  <summary><span class="tag-badge" style="background:#aa2200">&lt;center&gt;</span> Centralizar (removido)</summary>
+  <div class="detail-body"><p>Centralizava conteúdo. Removido. Use CSS: <code>text-align: center</code> ou Flexbox.</p></div>
+</details>
+<details>
+  <summary><span class="tag-badge" style="background:#aa2200">&lt;font&gt;</span> Estilo de fonte (removido)</summary>
+  <div class="detail-body"><p>Definia fonte, cor e tamanho. Removido. Use CSS.</p></div>
+</details>
+<details>
+  <summary><span class="tag-badge" style="background:#aa2200">&lt;frame&gt; / &lt;frameset&gt; / &lt;noframes&gt;</span> Frames (removido)</summary>
+  <div class="detail-body"><p>Dividiam a janela em múltiplos documentos. Removidos. Use <code>&lt;iframe&gt;</code> ou layouts CSS.</p></div>
+</details>
+<details>
+  <summary><span class="tag-badge" style="background:#aa2200">&lt;marquee&gt;</span> Texto em movimento (obsoleto)</summary>
+  <div class="detail-body"><p>Criava texto animado horizontalmente. Obsoleto. Use animações CSS: <code>@keyframes</code>.</p></div>
+</details>
+<details>
+  <summary><span class="tag-badge" style="background:#aa2200">&lt;menuitem&gt;</span> Item de menu contextual (removido)</summary>
+  <div class="detail-body"><p>Definia um item em menu contextual. Removido da especificação.</p></div>
+</details>
+<details>
+  <summary><span class="tag-badge" style="background:#aa2200">&lt;strike&gt;</span> Use &lt;s&gt; ou &lt;del&gt;</summary>
+  <div class="detail-body"><p>Exibia texto tachado. Substituído semanticamente por <code>&lt;s&gt;</code> (não mais relevante) ou <code>&lt;del&gt;</code> (conteúdo deletado).</p></div>
+</details>
+<details>
+  <summary><span class="tag-badge" style="background:#aa2200">&lt;tt&gt;</span> Texto em teletipo (removido)</summary>
+  <div class="detail-body"><p>Exibia texto em fonte monoespaçada. Removido. Use <code>&lt;code&gt;</code>, <code>&lt;kbd&gt;</code> ou <code>&lt;samp&gt;</code>.</p></div>
+</details>
+
+</main>
+</div>
+</body>
+</html>
